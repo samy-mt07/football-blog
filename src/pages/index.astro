@@ -31,12 +31,21 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
           <a
             href={`/posts/${post.id}/`}
             class:list={[
-              'group block rounded-lg border p-5 transition-colors',
+              'group block rounded-lg border overflow-hidden transition-colors',
               post.data.tag === 'Controversy'
                 ? 'border-card-red/25 bg-card-red/[0.06] hover:border-card-red/50'
                 : 'border-chalk-dim/15 bg-turf-shadow/50 hover:border-floodlight/40',
             ]}
           >
+            {post.data.cover && (
+              <img
+                src={post.data.cover}
+                alt={post.data.title}
+                class="w-full aspect-[16/9] object-cover"
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
+            )}
+            <div class="p-5">
             <div
               class:list={[
                 'flex items-center gap-2 text-[10px] uppercase tracking-widest mb-3',
@@ -57,6 +66,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
               {post.data.title}
             </h3>
             <p class="text-sm text-chalk-dim leading-relaxed">{post.data.excerpt}</p>
+            </div>
           </a>
           {i === 1 && (
             <div class="sm:col-span-2">

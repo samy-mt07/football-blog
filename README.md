@@ -17,14 +17,36 @@ Drop a new markdown file in `src/content/posts/`, e.g. `src/content/posts/argent
 ---
 title: "Argentina Edge France in a Classic"
 excerpt: "One-line summary for the homepage card."
+metaDescription: "Optional SEO description for the <head> tag. Falls back to excerpt if omitted."
 date: 2026-07-13
 tag: "Match Report"
+cover: "/images/posts/argentina-vs-france.jpg"
 ---
 
 Your writeup here. Just markdown — headings, bold, links all work.
 ```
 
 Save it, run `npm run build` (or just `npm run dev` while writing), and it appears on the homepage automatically, newest first. No CMS, no database.
+
+`cover` is optional — point it at a file in `public/images/posts/`. When set, it shows as a homepage card thumbnail, a hero image on the post page, and the `og:image`/Twitter card image for social sharing.
+
+### Add a post programmatically
+
+`scripts/create-post.mjs` is the entry point automation (e.g. n8n) uses to publish a post — it downloads the cover image and writes the formatted markdown file in one call:
+
+```bash
+node scripts/create-post.mjs '{
+  "title": "Argentina Edge France in a Classic",
+  "excerpt": "One-line summary for the homepage card.",
+  "metaDescription": "Optional SEO description.",
+  "date": "2026-07-13",
+  "tag": "Match Report",
+  "coverImageUrl": "https://example.com/some-photo.jpg",
+  "body": "## How it went\n\nYour markdown here."
+}'
+```
+
+Also accepts a JSON file path as the argument, or JSON piped via stdin. Prints `{"ok": true, "slug": ...}` on success, or `{"ok": false, "error": ...}` (exit code 1) on failure — safe to parse from an n8n HTTP Request/Execute Command node.
 
 ## Scores
 

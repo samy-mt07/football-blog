@@ -6,6 +6,8 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     excerpt: z.string(),
+    // SEO meta description (<head> tag). Falls back to excerpt if omitted.
+    metaDescription: z.string().optional(),
     date: z.coerce.date(),
     // Match Report, Preview, Opinion, News, or Controversy (ref decisions, VAR, red cards, disputes)
     tag: z.string().default('Match Report'),

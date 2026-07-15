@@ -15,7 +15,11 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Layout title={`${post.data.title} — Fulltime`} description={post.data.excerpt}>
+<Layout
+  title={`${post.data.title} — Fulltime`}
+  description={post.data.metaDescription ?? post.data.excerpt}
+  image={post.data.cover}
+>
   <article class="max-w-2xl mx-auto px-4 py-10">
     <a href="/" class="text-xs text-chalk-dim hover:text-floodlight transition-colors">&larr; Back</a>
 
@@ -31,9 +35,18 @@ const { Content } = await render(post);
       <span class="text-chalk-dim">{post.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
     </div>
 
-    <h1 class="font-display text-3xl md:text-4xl text-chalk tracking-wide leading-tight mb-8">
+    <h1 class="font-display text-3xl md:text-4xl text-chalk tracking-wide leading-tight mb-6">
       {post.data.title}
     </h1>
+
+    {post.data.cover && (
+      <img
+        src={post.data.cover}
+        alt={post.data.title}
+        class="w-full aspect-video object-cover rounded-lg mb-8 border border-chalk-dim/15"
+        loading="eager"
+      />
+    )}
 
     <div class="prose-post text-chalk/90 leading-relaxed">
       <Content />
