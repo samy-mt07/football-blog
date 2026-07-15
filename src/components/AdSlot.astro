@@ -1,0 +1,25 @@
+---
+// Drop your AdSense (or other network) <ins>/<script> snippet inside the placeholder below
+// once your account is approved. Keeping it as a labeled component means every ad slot
+// on the site updates from one place.
+interface Props {
+  variant?: 'banner' | 'inline' | 'sidebar';
+}
+const { variant = 'inline' } = Astro.props;
+
+const heights: Record<string, string> = {
+  banner: 'h-24',
+  inline: 'h-32',
+  sidebar: 'h-64',
+};
+---
+
+<div
+  class:list={[
+    'ad-slot w-full rounded border border-dashed border-chalk-dim/30 bg-turf-shadow/40 flex items-center justify-center text-chalk-dim text-xs tracking-widest uppercase font-score',
+    heights[variant],
+  ]}
+  aria-label="Advertisement"
+>
+  Ad space — {variant}
+</div>

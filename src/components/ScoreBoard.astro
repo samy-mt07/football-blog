@@ -1,0 +1,47 @@
+---
+import { getRecentResults, getUpcomingFixtures } from '../lib/scores';
+
+const [results, fixtures] = await Promise.all([getRecentResults(), getUpcomingFixtures()]);
+const isLive = (status: string) => /1H|2H|HT|ET|LIVE/i.test(status);
+---
+
+<section class="border-y border-chalk-dim/15 bg-turf-shadow/60">
+  <div class="max-w-5xl mx-auto px-4 py-6 overflow-x-auto">
+    <div class="flex gap-3 min-w-max">
+      {fixtures.slice(0, 3).map((m) => (
+        <div class="flap rounded px-4 py-3 min-w-[220px]">
+          <div class="flex items-center justify-between text-[10px] text-chalk-dim uppercase tracking-widest mb-2">
+            <span>{m.date} · {m.time || 'TBD'}</span>
+            <span>Upcoming</span>
+          </div>
+          <div class="flex items-center justify-between text-sm text-chalk">
+            <span class="truncate pr-2">{m.homeTeam}</span>
+            <span class="text-chalk-dim">vs</span>
+            <span class="truncate pl-2 text-right">{m.awayTeam}</span>
+          </div>
+        </div>
+      ))}
+      {results.slice(0, 5).map((m) => (
+        <div class="flap rounded px-5 py-4 min-w-[260px]">
+          <div class="flex items-center justify-between text-[10px] text-chalk-dim uppercase tracking-widest mb-2">
+            <span class="flex items-center gap-1.5">
+              {isLive(m.status) && <span class="live-dot w-1.5 h-1.5 rounded-full bg-card-red"></span>}
+              {m.status}
+            </span>
+            <span>{m.date}</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="flex-1 truncate text-sm text-chalk text-right">{m.homeTeam}</span>
+            <span class="font-score text-floodlight text-3xl font-bold tracking-tight leading-none tabular-nums">
+              {m.homeScore ?? '–'}<span class="text-chalk-dim mx-1">:</span>{m.awayScore ?? '–'}
+            </span>
+            <span class="flex-1 truncate text-sm text-chalk">{m.awayTeam}</span>
+          </div>
+        </div>
+      ))}
+      {results.length === 0 && fixtures.length === 0 && (
+        <p class="text-chalk-dim text-sm py-4">Scores will appear here once the tournament schedule is live.</p>
+      )}
+    </div>
+  </div>
+</section>

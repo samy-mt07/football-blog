@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScoreBoard from '../components/ScoreBoard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="Fulltime — World Cup Scores & Stories">
+  <section class="max-w-5xl mx-auto px-4 pt-10 pb-6">
+    <p class="font-score text-xs tracking-[0.3em] text-floodlight uppercase mb-2">Match Center</p>
+    <h1 class="font-display text-4xl md:text-5xl text-chalk tracking-wide leading-tight">
+      Results, Fixtures &amp; Reports
+    </h1>
+  </section>
+
+  <ScoreBoard />
+
+  <section id="latest" class="max-w-5xl mx-auto px-4 py-10">
+    <h2 class="font-display text-2xl text-chalk tracking-wide mb-6">Latest</h2>
+
+    {posts.length === 0 && (
+      <p class="text-chalk-dim text-sm">No posts yet — drop a markdown file into src/content/posts/ and it shows up here.</p>
+    )}
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {posts.map((post, i) => (
+        <>
+          <a
+            href={`/posts/${post.id}/`}
+            class:list={[
+              'group block rounded-lg border p-5 transition-colors',
+              post.data.tag === 'Controversy'
+                ? 'border-card-red/25 bg-card-red/[0.06] hover:border-card-red/50'
+                : 'border-chalk-dim/15 bg-turf-shadow/50 hover:border-floodlight/40',
+            ]}
+          >
+            <div
+              class:list={[
+                'flex items-center gap-2 text-[10px] uppercase tracking-widest mb-3',
+                post.data.tag === 'Controversy' ? 'text-card-red' : 'text-floodlight',
+              ]}
+            >
+              {post.data.tag === 'Controversy' && <span class="w-1.5 h-1.5 rounded-full bg-card-red"></span>}
+              <span>{post.data.tag}</span>
+              <span class="text-chalk-dim">·</span>
+              <span class="text-chalk-dim">{post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+            </div>
+            <h3
+              class:list={[
+                'font-display text-xl text-chalk tracking-wide transition-colors mb-2',
+                post.data.tag === 'Controversy' ? 'group-hover:text-card-red' : 'group-hover:text-floodlight',
+              ]}
+            >
+              {post.data.title}
+            </h3>
+            <p class="text-sm text-chalk-dim leading-relaxed">{post.data.excerpt}</p>
+          </a>
+          {i === 1 && (
+            <div class="sm:col-span-2">
+              <AdSlot variant="inline" />
+            </div>
+          )}
+        </>
+      ))}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,55 @@
+---
+import AdSlot from '../components/AdSlot.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Fast World Cup match reports, previews and results.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;600&family=Public+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- AdSense: paste your <script async src="...adsbygoogle.js?client=ca-pub-XXXX"> tag here once approved -->
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="border-b border-chalk-dim/15">
+      <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="font-display text-2xl tracking-wide text-chalk hover:text-floodlight transition-colors">
+          FULL<span class="text-floodlight">TIME</span>
+        </a>
+        <nav class="flex items-center gap-5 text-sm text-chalk-dim">
+          <a href="/" class="hover:text-chalk transition-colors">Results</a>
+          <a href="/#latest" class="hover:text-chalk transition-colors">Latest</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <div class="max-w-5xl mx-auto w-full px-4 py-6">
+      <AdSlot variant="banner" />
+    </div>
+
+    <footer class="border-t border-chalk-dim/15 mt-auto">
+      <div class="max-w-5xl mx-auto px-4 py-6 text-xs text-chalk-dim flex items-center justify-between">
+        <span>© {new Date().getFullYear()} Fulltime Blog</span>
+        <span>Scores via TheSportsDB</span>
+      </div>
+    </footer>
+  </body>
+</html>

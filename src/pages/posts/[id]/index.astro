@@ -1,0 +1,60 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} — Fulltime`} description={post.data.excerpt}>
+  <article class="max-w-2xl mx-auto px-4 py-10">
+    <a href="/" class="text-xs text-chalk-dim hover:text-floodlight transition-colors">&larr; Back</a>
+
+    <div
+      class:list={[
+        'flex items-center gap-2 text-[10px] uppercase tracking-widest mt-6 mb-3',
+        post.data.tag === 'Controversy' ? 'text-card-red' : 'text-floodlight',
+      ]}
+    >
+      {post.data.tag === 'Controversy' && <span class="w-1.5 h-1.5 rounded-full bg-card-red"></span>}
+      <span>{post.data.tag}</span>
+      <span class="text-chalk-dim">·</span>
+      <span class="text-chalk-dim">{post.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+    </div>
+
+    <h1 class="font-display text-3xl md:text-4xl text-chalk tracking-wide leading-tight mb-8">
+      {post.data.title}
+    </h1>
+
+    <div class="prose-post text-chalk/90 leading-relaxed">
+      <Content />
+    </div>
+
+    <div class="mt-10">
+      <AdSlot variant="inline" />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .prose-post :global(h2) {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    color: var(--color-chalk);
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-post :global(p) {
+    margin-bottom: 1rem;
+  }
+</style>

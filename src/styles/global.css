@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  /* Stadium-at-night palette — not pure black, a deep turf-shadow green-black */
+  --color-pitch-night: #10201b;
+  --color-turf-shadow: #1a2b24;
+  --color-turf-shadow-2: #20342b;
+  --color-chalk: #e8ece9;
+  --color-chalk-dim: #7c8b84;
+  --color-floodlight: #f2b705;
+  --color-floodlight-dim: #a3810c;
+  --color-turf-live: #38b26b;
+  --color-card-red: #e85d4c;
+
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-score: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+html {
+  background: var(--color-pitch-night);
+  color: var(--color-chalk);
+  font-family: var(--font-body);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(242, 183, 5, 0.08), transparent),
+    repeating-linear-gradient(
+      180deg,
+      var(--color-pitch-night) 0px,
+      var(--color-pitch-night) 78px,
+      var(--color-turf-shadow) 78px,
+      var(--color-turf-shadow) 80px
+    );
+}
+
+/* Split-flap scoreboard digit — the page's signature element */
+.flap {
+  font-family: var(--font-score);
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #1c2b23 0%, #0f1a14 100%);
+  border: 1px solid rgba(232, 236, 233, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+.flap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.live-dot {
+  box-shadow: 0 0 0 0 rgba(232, 93, 76, 0.6);
+  animation: live-pulse 1.8s infinite;
+}
+@keyframes live-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(232, 93, 76, 0.55); }
+  70% { box-shadow: 0 0 0 8px rgba(232, 93, 76, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 93, 76, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+::selection {
+  background: var(--color-floodlight);
+  color: var(--color-pitch-night);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-floodlight);
+  outline-offset: 2px;
+}
