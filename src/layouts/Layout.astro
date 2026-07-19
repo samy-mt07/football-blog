@@ -1,6 +1,8 @@
 ---
 import AdSlot from '../components/AdSlot.astro';
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
+
 
 interface Props {
   title: string;
@@ -23,6 +25,7 @@ const { title, description = 'Fast World Cup match reports, previews and results
       rel="stylesheet"
     />
     <!-- AdSense: paste your <script async src="...adsbygoogle.js?client=ca-pub-XXXX"> tag here once approved -->
+    <Analytics />
   </head>
   <body class="min-h-screen flex flex-col">
     <header class="border-b border-chalk-dim/15">
